@@ -19,7 +19,7 @@ jobs:
     - name: Fetch file from hosting
       run: |
         # Download the file, following redirects and saving as jtv.m3u
-        curl -L -o jtv.m3u "https://raw.githubusercontent.com/alex4528x/m3u/refs/heads/main/jtv.m3u"
+        curl -L -o jtv.m3u "https://raw.githubusercontent.com/alex4528x/m3u_1/refs/heads/main/jtv.m3u"
 
     - name: Commit and push changes
       run: |
