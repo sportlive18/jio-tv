@@ -1,0 +1,38 @@
+name: Update jtv.m3u
+
+on:
+  workflow_dispatch:  # <-- This enables manual triggering
+  schedule:
+    - cron: '*/5 * * * *' # Runs every 5 minutes
+
+permissions:
+  contents: write    # <--- This is required for the bot to push changes
+
+jobs:
+  update-file:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Fetch file from hosting
+      run: |
+        # Download the file, following redirects and saving as jtv.m3u
+        curl -L -o jtv2.m3u "https://raw.githubusercontent.com/rkdyiptv/Playlist/refs/heads/main/Playlist/Cricket.m3u/index.html"
+
+    - name: Commit and push changes
+      run: |
+        git config --global user.name "sportlive18"
+        git config --global user.email "271363488+sportlive18@users.noreply.github.com"
+        
+        # Add the file to the staging area
+        git add jtv2.m3u
+        
+        # Only commit and push if there are actual changes to prevent cluttering history & errors
+        if git diff --cached --quiet; then
+          echo "No changes in jtv.m3u, skipping commit."
+        else
+          git commit -m "Automated update of jtv2.m3u"
+          git push origin HEAD:main
+        fi
